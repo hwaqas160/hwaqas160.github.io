@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta property="og:title" content="Hassan Waqas Saleem · AI & Embedded Systems Engineer">
+<meta property="og:description" content="Edge AI inference, embedded Linux on RISC-V, and statistical safety for autonomous driving.">
+<meta property="og:image" content="https://hwaqas160.github.io/headshot_dark.jpg">
+<meta property="og:url" content="https://hwaqas160.github.io/">
+<link rel="canonical" href="https://hwaqas160.github.io/">
+<meta name="theme-color" content="#0a111c">
+<title>Hassan Waqas Saleem</title>
+<meta name="description" content="Hassan Waqas Saleem, AI and Embedded Systems Engineer. Edge AI inference, embedded Linux on RISC-V, and statistical safety for autonomous driving.">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a dark executive page on deep navy; one 12-column measure, every section opens with the same numbered header; champagne gold only for rules, labels and key figures. Single dark theme by design. */
+:root {
+  color-scheme: dark;
+  --bg:#0a111c; --bg-2:#0d1624; --surface:#111c2d; --raised:#16233a; --line:#1f2c42; --line-2:#2a3a55;
+  --head:#f2f5f9; --text:#d3dbe6; --muted:#93a1b5; --faint:#66758b;
+  --gold:#c8a96a; --gold-2:#e0c793; --gold-soft:rgba(200,169,106,.10); --ok:#5fc396; --err:#ef8f8f;
+  --serif:"Cormorant Garamond","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --sans:"Manrope","Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; scroll-padding-top:calc(76px + env(safe-area-inset-top, 0px)); background:var(--bg); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } *, *::before, *::after { transition:none !important; } }
+body { margin:0; background:var(--bg); color:var(--text); font:16px/1.7 var(--sans); -webkit-font-smoothing:antialiased; }
+body::before { content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top, 0px); z-index:60; background:var(--bg); }
+.g { padding-left:max(24px, env(safe-area-inset-left, 0px)); padding-right:max(24px, env(safe-area-inset-right, 0px)); }
+.w { max-width:1160px; margin:0 auto; }
+h1, h2, h3, h4 { margin:0; text-wrap:balance; color:var(--head); }
+p { margin:0; }
+a { color:inherit; }
+::selection { background:rgba(200,169,106,.35); color:#fff; }
+:focus-visible { outline:2px solid var(--gold); outline-offset:3px; border-radius:2px; }
+.eyebrow { font:500 11.5px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--gold); display:flex; align-items:center; gap:12px; }
+.eyebrow b { font-weight:500; color:var(--faint); }
+.eyebrow::before { content:""; width:28px; height:1px; background:var(--gold); }
+
+/* nav */
+.nav { position:sticky; top:env(safe-area-inset-top, 0px); z-index:50; background:rgba(10,17,28,.86); backdrop-filter:saturate(1.3) blur(12px); -webkit-backdrop-filter:saturate(1.3) blur(12px); border-bottom:1px solid var(--line); }
+.nav .w { display:flex; align-items:center; justify-content:space-between; gap:18px; height:72px; }
+.brand { display:flex; align-items:center; gap:12px; text-decoration:none; }
+.mono { width:40px; height:40px; border:1px solid var(--gold); display:grid; place-items:center; font:600 17px var(--serif); color:var(--gold-2); letter-spacing:.04em; }
+.brand b { font:600 15px var(--sans); color:var(--head); }
+.brand small { display:block; font:400 11px var(--mono); color:var(--faint); letter-spacing:.08em; }
+.links { display:flex; align-items:center; gap:28px; }
+.links a { text-decoration:none; font-size:14px; font-weight:500; color:var(--muted); transition:color .2s; }
+.links a:hover { color:var(--head); }
+@media (max-width:960px) { .links a:not(.btn) { display:none; } .brand small { display:none; } }
+
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:10px; font:600 14.5px var(--sans); padding:13px 22px; text-decoration:none; border:1px solid var(--line-2); cursor:pointer; transition:background .2s, color .2s, border-color .2s; color:var(--head); background:transparent; }
+.btn:hover { border-color:var(--gold); color:var(--gold-2); }
+.btn.gold { background:var(--gold); border-color:var(--gold); color:#141008; }
+.btn.gold:hover { background:var(--gold-2); border-color:var(--gold-2); color:#141008; }
+.btn.small { padding:9px 16px; font-size:13.5px; }
+.links .btn.gold { color:#141008; }
+
+/* hero */
+.hero { padding-block:80px 88px; background:
+  radial-gradient(800px 460px at 82% 18%, rgba(200,169,106,.08), transparent 60%),
+  radial-gradient(700px 500px at 0% 100%, rgba(60,90,140,.12), transparent 60%), var(--bg); }
+.hero .w { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr); gap:72px; align-items:center; }
+.hero h1 { font:500 clamp(50px, 7.4vw, 94px)/.95 var(--serif); letter-spacing:-.01em; margin-top:26px; }
+.hero h1 em { font-style:italic; color:var(--gold-2); }
+.hero .lead { font-size:clamp(17px, 1.6vw, 19px); color:var(--muted); max-width:52ch; margin-top:28px; }
+.hero .lead b { color:var(--head); font-weight:600; }
+.hero .actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:36px; }
+.social { display:flex; flex-wrap:wrap; gap:22px; margin-top:32px; font:500 12px var(--mono); letter-spacing:.12em; text-transform:uppercase; }
+.social a { color:var(--muted); text-decoration:none; border-bottom:1px solid var(--line-2); padding-bottom:4px; }
+.social a:hover { color:var(--gold-2); border-color:var(--gold); }
+.frame { position:relative; justify-self:end; width:min(100%, 390px); margin:0; }
+.frame::before { content:""; position:absolute; inset:-16px 16px 16px -16px; border:1px solid rgba(200,169,106,.55); z-index:0; }
+.frame img { position:relative; z-index:1; display:block; width:100%; height:auto; aspect-ratio:732/915; object-fit:cover; box-shadow:0 40px 80px -30px rgba(0,0,0,.8); }
+.caption { position:absolute; z-index:2; left:-40px; bottom:36px; background:var(--raised); border:1px solid var(--line-2); border-left:2px solid var(--gold); padding:14px 18px; max-width:260px; box-shadow:0 20px 40px -20px rgba(0,0,0,.7); }
+.caption span { display:block; font:500 10.5px var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--gold); }
+.caption b { display:block; font:600 14px/1.45 var(--sans); color:var(--head); margin-top:6px; }
+@media (max-width:900px) {
+  .hero .w { grid-template-columns:1fr; gap:56px; }
+  .frame { justify-self:center; width:min(84%, 340px); order:-1; }
+  .caption { left:auto; right:-12px; bottom:-24px; }
+}
+
+/* credentials */
+.creds { border-block:1px solid var(--line); background:var(--bg-2); }
+.creds .w { display:grid; grid-template-columns:auto repeat(5, 1fr); align-items:center; gap:18px 28px; padding-block:24px; }
+.creds span { font:500 11px var(--mono); letter-spacing:.18em; text-transform:uppercase; color:var(--faint); }
+.creds b { font:600 19px var(--serif); color:var(--muted); letter-spacing:.03em; text-align:center; white-space:nowrap; }
+@media (max-width:900px) { .creds .w { grid-template-columns:repeat(3, 1fr); } .creds span { grid-column:1 / -1; } .creds b { text-align:left; } }
+
+/* sections */
+.sec { padding-block:112px 0; }
+.sec + .sec { border-top:1px solid var(--line); margin-top:112px; }
+.sec-head { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:56px; align-items:end; margin-bottom:56px; }
+.sec-head h2 { font:500 clamp(38px, 4.6vw, 56px)/1.04 var(--serif); margin-top:18px; }
+.sec-head p { color:var(--muted); max-width:54ch; }
+@media (max-width:900px) { .sec-head { grid-template-columns:1fr; gap:18px; } }
+
+.numbers { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); background:var(--surface); border:1px solid var(--line); }
+.num { padding:30px 28px; border-left:1px solid var(--line); }
+.num:first-child { border-left:0; }
+.num b { display:block; font:500 50px/1 var(--serif); color:var(--gold-2); font-variant-numeric:lining-nums tabular-nums; }
+.num span { display:block; margin-top:12px; font-size:14px; color:var(--muted); }
+@media (max-width:760px) { .numbers { grid-template-columns:1fr 1fr; } .num:nth-child(3) { border-left:0; } .num:nth-child(n+3) { border-top:1px solid var(--line); } }
+
+.about { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr); gap:72px; margin-top:64px; }
+.about .text { display:grid; gap:20px; max-width:62ch; }
+.about .text p:first-child { font:500 26px/1.45 var(--serif); color:var(--head); }
+.facts { display:grid; align-content:start; border-top:1px solid var(--gold); }
+.facts div { display:grid; grid-template-columns:110px 1fr; gap:16px; padding:15px 0; border-bottom:1px solid var(--line); font-size:14.5px; color:var(--text); }
+.facts .k { font:500 11px var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--faint); padding-top:3px; }
+.facts a { color:var(--gold-2); text-decoration:none; }
+.facts a:hover { text-decoration:underline; }
+@media (max-width:900px) { .about { grid-template-columns:1fr; gap:44px; } }
+
+.pillars { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); background:var(--surface); border:1px solid var(--line); }
+.pillar { padding:34px 28px; border-left:1px solid var(--line); display:grid; gap:14px; align-content:start; transition:background .2s; }
+.pillar:hover { background:var(--raised); }
+.pillar:first-child { border-left:0; }
+.pillar .n { font:500 12px var(--mono); color:var(--gold); letter-spacing:.1em; }
+.pillar h3 { font:600 26px/1.15 var(--serif); }
+.pillar p { font-size:14.5px; color:var(--muted); }
+.pillar ul { margin:6px 0 0; padding:16px 0 0; border-top:1px solid var(--line); list-style:none; display:grid; gap:8px; font-size:14px; }
+.pillar li { padding-left:16px; position:relative; }
+.pillar li::before { content:""; position:absolute; left:0; top:.78em; width:7px; height:1px; background:var(--gold); }
+@media (max-width:1000px) { .pillars { grid-template-columns:1fr 1fr; } .pillar:nth-child(3) { border-left:0; } .pillar:nth-child(n+3) { border-top:1px solid var(--line); } }
+@media (max-width:620px) { .pillars { grid-template-columns:1fr; } .pillar { border-left:0; border-top:1px solid var(--line); } .pillar:first-child { border-top:0; } }
+
+.cases { display:grid; gap:24px; }
+.case { background:var(--surface); border:1px solid var(--line); display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); transition:border-color .2s; }
+.case:hover { border-color:var(--line-2); }
+.case .side { background:linear-gradient(160deg, var(--raised), var(--bg-2)); border-right:1px solid var(--line); padding:40px 36px; display:grid; gap:24px; align-content:space-between; position:relative; overflow:hidden; }
+.case .side::after { content:""; position:absolute; right:-70px; bottom:-70px; width:230px; height:230px; border:1px solid rgba(200,169,106,.22); border-radius:50%; }
+.case .side::before { content:""; position:absolute; right:-25px; bottom:-25px; width:140px; height:140px; border:1px solid rgba(200,169,106,.16); border-radius:50%; }
+.case .tag { font:500 11px var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--gold); }
+.case .side h3 { font:500 clamp(28px, 3vw, 36px)/1.1 var(--serif); margin-top:12px; }
+.metric { position:relative; z-index:1; }
+.metric b { display:block; font:500 44px/1 var(--serif); color:var(--gold-2); }
+.metric span { display:block; font-size:13.5px; color:var(--muted); margin-top:10px; max-width:30ch; }
+.case .body { padding:40px 40px 34px; display:grid; gap:24px; align-content:start; }
+.case dl { margin:0; display:grid; gap:20px; }
+.case dt { font:500 11px var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--gold); margin-bottom:6px; }
+.case dd { margin:0; font-size:15.5px; }
+.stack { display:flex; flex-wrap:wrap; gap:6px; padding-top:20px; border-top:1px solid var(--line); }
+.stack span { font:400 12px var(--mono); color:var(--muted); background:var(--bg-2); border:1px solid var(--line); padding:3px 9px; }
+@media (max-width:900px) { .case { grid-template-columns:1fr; } .case .side { border-right:0; border-bottom:1px solid var(--line); } .case .body, .case .side { padding:30px 24px; } }
+
+.subhead { display:flex; align-items:center; gap:16px; margin:64px 0 20px; font:500 11.5px var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--faint); }
+.subhead::after { content:""; flex:1; height:1px; background:var(--line); }
+.more { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); }
+.mw { background:var(--surface); padding:28px 26px; display:grid; gap:10px; align-content:start; transition:background .2s; }
+.mw:hover { background:var(--raised); }
+.mw .tag { font:500 10.5px var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--gold); }
+.mw h4 { font:600 22px/1.2 var(--serif); }
+.mw p { font-size:14.5px; color:var(--muted); }
+@media (max-width:1000px) { .more { grid-template-columns:1fr 1fr; } }
+@media (max-width:620px) { .more { grid-template-columns:1fr; } }
+
+.pubs { display:grid; border-top:1px solid var(--gold); }
+.pub { display:grid; grid-template-columns:80px minmax(0,1fr) auto; gap:24px; padding:30px 0; border-bottom:1px solid var(--line); align-items:start; }
+.pub .idx { font:500 36px/1 var(--serif); color:var(--gold); }
+.pub h3 { font:600 23px/1.3 var(--serif); }
+.pub .meta { font-size:14px; color:var(--muted); margin-top:8px; }
+.pub details { margin-top:12px; }
+.pub summary { cursor:pointer; font-size:14px; font-weight:600; color:var(--gold-2); list-style:none; display:inline-flex; gap:8px; align-items:center; }
+.pub summary::-webkit-details-marker { display:none; }
+.pub summary::after { content:"+"; font:400 18px var(--sans); }
+.pub details[open] summary::after { content:"–"; }
+.pub details p { margin-top:10px; color:var(--muted); font-size:15px; max-width:76ch; }
+.status { font:500 10.5px var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--gold); border:1px solid rgba(200,169,106,.5); padding:5px 10px; white-space:nowrap; }
+@media (max-width:760px) { .pub { grid-template-columns:1fr; gap:10px; } .pub .status { justify-self:start; } }
+
+.xp { display:grid; border-top:1px solid var(--gold); }
+.role { display:grid; grid-template-columns:220px minmax(0,1fr); gap:40px; padding:34px 0; border-bottom:1px solid var(--line); }
+.role .when { font:500 13px var(--mono); color:var(--gold-2); font-variant-numeric:tabular-nums; }
+.role .where { font-size:14px; color:var(--faint); margin-top:6px; }
+.role h3 { font:600 25px/1.2 var(--serif); }
+.role .org { color:var(--muted); font-weight:600; font-size:14.5px; margin-top:4px; }
+.role ul { margin:14px 0 0; padding:0; list-style:none; display:grid; gap:9px; max-width:74ch; }
+.role li { padding-left:20px; position:relative; font-size:15.5px; }
+.role li::before { content:""; position:absolute; left:0; top:.8em; width:9px; height:1px; background:var(--gold); }
+@media (max-width:760px) { .role { grid-template-columns:1fr; gap:10px; } }
+
+.matrix { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); }
+.cell { background:var(--surface); padding:26px 24px; }
+.cell h4 { font:600 21px var(--serif); margin-bottom:14px; }
+.chips { display:flex; flex-wrap:wrap; gap:6px; }
+.chips span { font-size:13.5px; color:var(--text); background:var(--bg-2); border:1px solid var(--line); padding:4px 10px; }
+@media (max-width:900px) { .matrix { grid-template-columns:1fr 1fr; } }
+@media (max-width:620px) { .matrix { grid-template-columns:1fr; } }
+
+.edu { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:24px; }
+.deg { background:var(--surface); border:1px solid var(--line); border-top:2px solid var(--gold); padding:26px 24px; display:grid; gap:8px; align-content:start; }
+.deg .yr { font:500 13px var(--mono); color:var(--gold); }
+.deg h3 { font:600 23px/1.2 var(--serif); }
+.deg p { font-size:14.5px; color:var(--muted); }
+.honours { margin-top:24px; display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:24px; }
+.hon { background:var(--gold-soft); border:1px solid rgba(200,169,106,.25); padding:20px 22px; display:grid; gap:4px; }
+.hon b { font:600 21px var(--serif); color:var(--gold-2); }
+.hon span { font-size:14px; color:var(--muted); }
+@media (max-width:900px) { .edu, .honours { grid-template-columns:1fr; } }
+
+.principles { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:24px; }
+.pr { border-top:1px solid var(--line-2); padding-top:22px; }
+.pr h4 { font:600 24px var(--serif); margin-bottom:10px; }
+.pr p { color:var(--muted); font-size:15px; }
+@media (max-width:900px) { .principles { grid-template-columns:1fr; } }
+
+.contact { margin-top:120px; background:var(--bg-2); border-top:1px solid var(--line); padding-block:100px; position:relative; overflow:hidden; }
+.contact::after { content:""; position:absolute; right:-160px; top:-160px; width:520px; height:520px; border:1px solid rgba(200,169,106,.16); border-radius:50%; }
+.contact .w { display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:72px; position:relative; z-index:1; }
+.contact h2 { font:500 clamp(40px, 5vw, 60px)/1.02 var(--serif); margin-top:20px; }
+.contact h2 em { color:var(--gold-2); }
+.contact .intro { color:var(--muted); margin-top:20px; max-width:44ch; }
+.clist { margin-top:36px; display:grid; border-top:1px solid var(--line-2); }
+.clist a, .clist div { display:flex; justify-content:space-between; gap:16px; padding:16px 0; border-bottom:1px solid var(--line-2); text-decoration:none; font-size:15px; color:var(--text); }
+.clist a:hover { color:var(--gold-2); }
+.clist span:first-child { font:500 11px var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--faint); padding-top:3px; }
+form { background:var(--surface); border:1px solid var(--line-2); padding:40px; display:grid; gap:20px; box-shadow:0 40px 80px -40px rgba(0,0,0,.8); }
+form h3 { font:600 28px var(--serif); }
+.row2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+label { display:grid; gap:8px; font:500 11px var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+input, textarea, select { font:16px var(--sans); color:var(--head); background:var(--bg); border:1px solid var(--line-2); padding:12px 14px; width:100%; border-radius:0; letter-spacing:0; text-transform:none; transition:border-color .2s; }
+input:focus, textarea:focus, select:focus { outline:none; border-color:var(--gold); }
+textarea { min-height:150px; resize:vertical; }
+.hp { position:absolute; left:-5000px; width:1px; height:1px; }
+.note { font-size:13px; color:var(--faint); }
+.msg { font-size:14.5px; min-height:1.5em; }
+.msg.ok { color:var(--ok); } .msg.err { color:var(--err); }
+@media (max-width:900px) { .contact .w, .row2 { grid-template-columns:1fr; } form { padding:28px 22px; } }
+
+footer { background:var(--bg); border-top:1px solid var(--line); color:var(--faint); font-size:13.5px; padding-block:28px; }
+footer .w { display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+footer a { text-decoration:none; color:var(--muted); }
+footer a:hover { color:var(--gold-2); }
+.code { font:500 12px var(--mono); color:var(--gold-2); text-decoration:none; border:1px solid rgba(200,169,106,.45); padding:3px 9px; }
+.code:hover { background:var(--gold-soft); }
+.mw .code { justify-self:start; margin-top:4px; }
+.pub .meta .code { padding:1px 7px; }
+</style>
+</head>
+<body>
+
+
+<nav class="nav g" aria-label="Main">
+  <div class="w">
+    <a class="brand" href="#top"><span class="mono">HW</span><span><b>Hassan Waqas Saleem</b><small>AI &amp; EMBEDDED SYSTEMS</small></span></a>
+    <div class="links">
+      <a href="#about">About</a><a href="#expertise">Expertise</a><a href="#work">Work</a><a href="#research">Research</a><a href="#experience">Experience</a><a href="https://www.linkedin.com/in/hwaqas160" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/hwaqas160" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn gold small" href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero g" id="top">
+  <div class="w">
+    <div>
+      <div class="eyebrow">AI &amp; Embedded Systems Engineer · Islamabad</div>
+      <h1>Hassan<br>Waqas <em>Saleem</em></h1>
+      <p class="lead">I build <b>AI that runs on real hardware</b> and can be trusted when it does: on-device inference on embedded Linux, the RISC-V software stack beneath it, and <b>statistical safety guarantees</b> for autonomous driving.</p>
+      <div class="actions">
+        <a class="btn gold" href="#contact">Get in touch</a>
+        <a class="btn" href="#work">View selected work</a>
+        <a class="btn" href="Hassan_Waqas_Saleem_CV.pdf" target="_blank" rel="noopener">Download CV</a>
+      </div>
+      <div class="social"><a href="https://www.linkedin.com/in/hwaqas160" target="_blank" rel="noopener">LinkedIn ↗</a><a href="https://github.com/hwaqas160" target="_blank" rel="noopener">GitHub ↗</a><a href="https://orcid.org/0009-0003-4461-8005" target="_blank" rel="noopener">ORCID ↗</a><a href="#research">Publications</a></div>
+    </div>
+    <figure class="frame" style="margin:0">
+      <img src="headshot_dark.jpg" alt="Portrait of Hassan Waqas Saleem" width="732" height="915">
+      <figcaption class="caption"><span>Currently</span><b>Leading the embedded Linux stack for a 64-bit RISC-V processor</b></figcaption>
+    </figure>
+  </div>
+</header>
+
+<div class="creds g">
+  <div class="w">
+    <span>Education &amp; experience</span>
+    <b>NUST</b><b>UET Taxila</b><b>Advantest</b><b>IEEE T-IV</b><b>NSTP · NUST</b>
+  </div>
+</div>
+
+<main>
+<section class="sec g" id="about">
+  <div class="w">
+    <div class="sec-head">
+      <div><div class="eyebrow"><b>01</b>About</div><h2>From silicon to statistics</h2></div>
+      <p>Six years of work that started at the circuit board and moved up the stack: firmware, processor toolchains, embedded Linux, on-device AI, and research on when AI can be trusted.</p>
+    </div>
+    <div class="numbers">
+      <div class="num"><b>6+</b><span>years of industry experience in AI and embedded systems</span></div>
+      <div class="num"><b>3</b><span>first-author manuscripts under review at IEEE T-IV</span></div>
+      <div class="num"><b>64-bit</b><span>RISC-V processor whose Linux stack I lead</span></div>
+      <div class="num"><b>3</b><span>engineering degrees, including an M.S. in AI &amp; Autonomous Systems</span></div>
+    </div>
+    <div class="about">
+      <div class="text">
+        <p>I'm an electrical engineer who enjoys the whole path from a model to the silicon it runs on.</p>
+        <p>I began with STM32 and ESP32 firmware and computer-vision products at a startup in NUST's National Science &amp; Technology Park. At Advantest I designed high-speed and RF test boards for NVIDIA, AMD, Intel and NXP chips. In the public sector I built an IDE for an indigenous processor, and today I lead the embedded Linux stack for a 64-bit RISC-V core, where I am also bringing quantised LLMs on-device.</p>
+        <p>Alongside that, I research a question that matters for every autonomous system: when can we trust what the model predicts? My work shows where uncertainty guarantees break when the driving world changes, and how to restore them with only a handful of labelled scenes.</p>
+        <p>My work sits where both halves meet: edge AI inference, embedded Linux and RISC-V enablement, and ML evaluation and safety.</p>
+      </div>
+      <div class="facts">
+        <div><span class="k">Role</span><span>AI &amp; Embedded Systems Engineer</span></div>
+        <div><span class="k">Based in</span><span>Islamabad, Pakistan (UTC+5)</span></div>
+        <div><span class="k">LinkedIn</span><span><a href="https://www.linkedin.com/in/hwaqas160" target="_blank" rel="noopener">in/hwaqas160</a></span></div>
+        <div><span class="k">Degree</span><span>M.S. EE, AI &amp; Autonomous Systems, NUST</span></div>
+        <div><span class="k">Languages</span><span>English (C1–C2) · Urdu (native)</span></div>
+        <div><span class="k">GitHub</span><span><a href="https://github.com/hwaqas160" target="_blank" rel="noopener">hwaqas160</a></span></div>
+        <div><span class="k">ORCID</span><span><a href="https://orcid.org/0009-0003-4461-8005" target="_blank" rel="noopener">0009-0003-4461-8005</a></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec g" id="expertise">
+  <div class="w">
+    <div class="sec-head">
+      <div><div class="eyebrow"><b>02</b>Expertise</div><h2>Areas of expertise</h2></div>
+      <p>Four areas where I have shipped real work, from the circuit board to the model.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar"><span class="n">I.</span><h3>Edge AI inference</h3><p>Getting models to run well on constrained hardware.</p>
+        <ul><li>llama.cpp and quantised LLMs</li><li>Compact CNNs on embedded Linux</li><li>Memory, latency and throughput budgets</li><li>C/C++ cross-compilation</li></ul></div>
+      <div class="pillar"><span class="n">II.</span><h3>Embedded Linux &amp; RISC-V</h3><p>Bringing a new processor from bare toolchain to usable Linux.</p>
+        <ul><li>GCC, binutils, GDB, OpenOCD</li><li>Buildroot distributions</li><li>Kernel and device-tree configuration</li><li>U-Boot boot flow, GUI, IDE</li></ul></div>
+      <div class="pillar"><span class="n">III.</span><h3>Trustworthy ML</h3><p>Knowing when a model's prediction can be relied on.</p>
+        <ul><li>Conformal prediction under shift</li><li>Learn-then-Test risk control</li><li>Closed-loop safety evaluation</li><li>Camera, LiDAR and radar fusion</li></ul></div>
+      <div class="pillar"><span class="n">IV.</span><h3>Firmware &amp; hardware</h3><p>Comfortable at the board, the pin and the oscilloscope.</p>
+        <ul><li>STM32, ESP32, BLE 5.0</li><li>Post-silicon ADC verification</li><li>High-speed and RF PCB design</li><li>Multi-sensor data acquisition</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec g" id="work">
+  <div class="w">
+    <div class="sec-head">
+      <div><div class="eyebrow"><b>03</b>Selected work</div><h2>Case studies</h2></div>
+      <p>Four projects in detail: the problem, what I did, and what came out of it. Work for my current employer is described in general terms.</p>
+    </div>
+    <div class="cases">
+      <article class="case">
+        <div class="side">
+          <div><div class="tag">Embedded Linux · 2025 – present</div><h3>A complete Linux platform for a 64-bit RISC-V processor</h3></div>
+          <div class="metric"><b>Toolchain → UI</b><span>One engineer-led stack from compiler to graphical desktop</span></div>
+        </div>
+        <div class="body"><dl>
+          <div><dt>The problem</dt><dd>A new application-class CVA6 (RV64) processor needed a software platform developers could actually use: a compiler, an operating system, and tools to build, flash and debug.</dd></div>
+          <div><dt>What I did</dt><dd>Built and maintain the RISC-V cross-compilation toolchain (GCC, binutils, GDB, OpenOCD) and a Buildroot-based Linux distribution, including kernel and device-tree configuration, root filesystem, package integration and the U-Boot boot flow. Developed a Linux GUI for the platform and extended the in-house IDE to build, flash and debug on the chip. I set the software architecture, review code and plan releases.</dd></div>
+          <div><dt>Outcome</dt><dd>A working Linux platform on the processor, with one IDE workflow from source code to running software.</dd></div>
+        </dl><div class="stack"><span>GCC</span><span>binutils</span><span>GDB</span><span>OpenOCD</span><span>Buildroot</span><span>U-Boot</span><span>Linux kernel</span><span>device tree</span></div></div>
+      </article>
+
+      <article class="case">
+        <div class="side">
+          <div><div class="tag">Edge AI · 2025 – present</div><h3>Large language models on embedded RISC-V Linux</h3></div>
+          <div class="metric"><b>On-device</b><span>Quantised LLMs and compact networks running locally, with no cloud</span></div>
+        </div>
+        <div class="body"><dl>
+          <div><dt>The problem</dt><dd>AI workloads usually assume a GPU. The goal was to run useful models directly on an embedded RISC-V system with limited memory and compute.</dd></div>
+          <div><dt>What I did</dt><dd>Cross-compiled inference for compact neural networks and quantised LLMs with llama.cpp for Buildroot Linux on RISC-V, and worked through the trade-offs between model size, quantisation level, memory footprint and response speed. I am also evaluating LLM-based code assistance inside the processor's IDE.</dd></div>
+          <div><dt>Outcome</dt><dd>On-device inference running on the platform, connecting my M.S. research in AI to deployment on real hardware.</dd></div>
+        </dl><div class="stack"><span>llama.cpp</span><span>quantisation</span><span>C/C++</span><span>cross-compilation</span><span>RISC-V</span></div></div>
+      </article>
+
+      <article class="case">
+        <div class="side">
+          <div><div class="tag">Research · IEEE T-IV, submitted</div><h3>Does the conformal guarantee travel?</h3></div>
+          <div class="metric"><b>6–25 pts</b><span>coverage lost when a 90% guarantee moves between driving datasets</span></div>
+        </div>
+        <div class="body"><dl>
+          <div><dt>The problem</dt><dd>Conformal prediction promises that a trajectory forecaster's uncertainty region contains the true path 90% of the time. That promise assumes test data looks like calibration data, which is rarely true when a car moves to a new city.</dd></div>
+          <div><dt>What I did</dt><dd>Measured coverage loss for Wayformer and AutoBot when moved between Argoverse 2, nuScenes and Waymo Open Motion. Proved that no label-free method can repair an unrestricted shift, then designed a scene-level Learn-then-Test rule and a betting test that restore the guarantee.</dd></div>
+          <div><dt>Outcome</dt><dd>The guarantee restored using only 150–200 labelled scenes, at about twice the oracle region size.</dd></div>
+        </dl><div class="stack"><a class="code" href="https://github.com/hwaqas160/conformal-coverage-transfer" target="_blank" rel="noopener">View code ↗</a><span>PyTorch</span><span>Wayformer</span><span>AutoBot</span><span>Argoverse 2</span><span>nuScenes</span><span>Waymo</span></div></div>
+      </article>
+
+      <article class="case">
+        <div class="side">
+          <div><div class="tag">Research · IEEE T-IV, submitted</div><h3>Certifying what a self-driving car does when it falls back</h3></div>
+          <div class="metric"><b>1,008 / 1,008</b><span>checked pairs where lookup matched direct execution</span></div>
+        </div>
+        <div class="body"><dl>
+          <div><dt>The problem</dt><dd>When an autonomous vehicle detects danger it triggers a minimum-risk manoeuvre. Safety cases need evidence that the manoeuvre itself, not just the trigger, keeps harm below a target.</dd></div>
+          <div><dt>What I did</dt><dd>Showed that a closed-loop rollout depends only on the tick at which the fallback fires, so every trigger, threshold and latency can be evaluated by lookup. Then certified the executed manoeuvre with risk-ordered fixed-sequence testing in ScenarioNet/MetaDrive with reactive traffic.</dd></div>
+          <div><dt>Outcome</dt><dd>5.4% realised harm against a 7.5% target, replicated across three predictors, two traffic models and six held-out cities.</dd></div>
+        </dl><div class="stack"><a class="code" href="https://github.com/hwaqas160/paper03-risk-fallback" target="_blank" rel="noopener">View code ↗</a><span>ScenarioNet</span><span>MetaDrive</span><span>nuPlan</span><span>IDM traffic</span><span>risk control</span></div></div>
+      </article>
+    </div>
+
+    <div class="subhead">More projects</div>
+    <div class="more">
+      <div class="mw"><span class="tag">Research · Sensor fusion</span><h4>Camera, LiDAR and radar in bad weather</h4><p>An ~18k-parameter per-object router over frozen detectors. +0.064 mAP over per-frame fusion in real rain, snow, fog and darkness.</p><a class="code" href="https://github.com/hwaqas160/paper02-conflict-fusion" target="_blank" rel="noopener">View code ↗</a></div>
+      <div class="mw"><span class="tag">Developer tools</span><h4>StriveIDE</h4><p>Eclipse-style IDE to program and debug an indigenous processor, with OpenOCD cross-compiled for Windows and U-Boot flash scripts.</p></div>
+      <div class="mw"><span class="tag">Data acquisition</span><h4>Multi-sensor logger &amp; simulator</h4><p>STM32F4 system fusing mmWave radar, infrared and laser-rangefinder data for real-time decisions. Led the field trials.</p></div>
+      <div class="mw"><span class="tag">Silicon verification</span><h4>12-bit SAR ADC validation</h4><p>STM32F7 firmware to drive, capture and analyse an ADC's behaviour after fabrication.</p></div>
+      <div class="mw"><span class="tag">Hardware · Advantest</span><h4>High-speed &amp; RF test boards</h4><p>ATE boards for NVIDIA, AMD, Intel and NXP devices on Advantest 93K and Teradyne UltraFLEX, with 0.35–0.5 mm BGA fan-out and SI/PI analysis.</p></div>
+      <div class="mw"><span class="tag">Computer vision · KytherTek</span><h4>Vision products &amp; IoT</h4><p>Shooting-range scoring, CNN pose estimation for sports, DVT detection, and BLE 5.0 firmware for STM32 and ESP32 devices.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec g" id="research">
+  <div class="w">
+    <div class="sec-head">
+      <div><div class="eyebrow"><b>04</b>Research</div><h2>Publications</h2></div>
+      <p>Three first-author manuscripts submitted to IEEE Transactions on Intelligent Vehicles in 2026, with co-authors R. Z. Saleem and H. Maryam. Every experiment is pre-registered and released with per-scenario records.</p>
+    </div>
+    <div class="pubs">
+      <div class="pub"><span class="idx">01</span><div><h3>Does the Conformal Guarantee Travel? Measuring, Auditing and Repairing Coverage Loss in Cross-Dataset Trajectory Prediction</h3><div class="meta">H. W. Saleem, R. Z. Saleem, H. Maryam · IEEE Transactions on Intelligent Vehicles, 2026 · <a class="code" href="https://github.com/hwaqas160/conformal-coverage-transfer" target="_blank" rel="noopener">Code ↗</a></div>
+        <details><summary>Summary</summary><p>Shows that 90% conformal regions for trajectory forecasters lose 6–25 percentage points of coverage across Argoverse 2, nuScenes and Waymo Open Motion; proves label-free repair is impossible under unrestricted shift; restores the guarantee with a scene-level Learn-then-Test rule and a betting test from 150–200 labelled scenes.</p></details></div><span class="status">Under review</span></div>
+      <div class="pub"><span class="idx">02</span><div><h3>Certifying the Outcome of Autonomous Vehicle Fallback Triggers: Closed-Loop Evaluation Under Latency and Dataset Shift</h3><div class="meta">H. W. Saleem, R. Z. Saleem, H. Maryam · IEEE Transactions on Intelligent Vehicles, 2026 · <a class="code" href="https://github.com/hwaqas160/paper03-risk-fallback" target="_blank" rel="noopener">Code ↗</a></div>
+        <details><summary>Summary</summary><p>Evaluates every trigger, threshold and latency by lookup (matching direct execution in all 1,008 checked pairs) and certifies the executed minimum-risk manoeuvre with risk-ordered fixed-sequence testing: 5.4% realised harm against a 7.5% target across three predictors, two traffic models and six held-out cities.</p></details></div><span class="status">Under review</span></div>
+      <div class="pub"><span class="idx">03</span><div><h3>When Does Per-Object Arbitration Help? Late Fusion over Frozen Camera, LiDAR, and Radar Detectors in Simulated and Real Adverse Weather</h3><div class="meta">H. W. Saleem, R. Z. Saleem, H. Maryam · IEEE Transactions on Intelligent Vehicles, 2026 · <a class="code" href="https://github.com/hwaqas160/paper02-conflict-fusion" target="_blank" rel="noopener">Code ↗</a></div>
+        <details><summary>Summary</summary><p>An ~18k-parameter per-object router beats per-frame fusion by 0.077 mAP in simulated weather and 0.064 mAP in real rain, snow, fog and darkness (CADC, Boreas, K-Radar), and maps where the gain disappears: without radar, sim-to-real, and with fine-tuned LiDAR.</p></details></div><span class="status">Under review</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec g" id="experience">
+  <div class="w">
+    <div class="sec-head">
+      <div><div class="eyebrow"><b>05</b>Experience</div><h2>Career</h2></div>
+      <p>Four roles across a startup, a global semiconductor-test company and the public sector.</p>
+    </div>
+    <div class="xp">
+      <div class="role"><div><div class="when">Dec 2025 – Present</div><div class="where">Islamabad</div></div><div><h3>Manager (Technical), Embedded Linux &amp; Processor Software</h3><div class="org">Public sector organization</div><ul>
+        <li>Lead the embedded Linux software stack for an application-class CVA6 (64-bit RISC-V) processor, from compiler toolchain to user interface.</li>
+        <li>Built and maintain the RISC-V cross-toolchain (GCC, binutils, GDB, OpenOCD) and a Buildroot-based Linux distribution: kernel and device tree, root filesystem, packages and boot flow.</li>
+        <li>Bringing AI workloads on-device: compact neural networks and quantised LLMs (llama.cpp) on Buildroot Linux; evaluating LLM code assistance in the IDE.</li>
+        <li>Developed a Linux GUI for the platform and extended the IDE to build, flash and debug on the processor.</li>
+        <li>Set software architecture, review code, and plan verification and releases.</li></ul></div></div>
+      <div class="role"><div><div class="when">May 2023 – Dec 2025</div><div class="where">Islamabad</div></div><div><h3>Assistant Manager (Technical), Embedded Software</h3><div class="org">Public sector organization</div><ul>
+        <li>Designed and built StriveIDE, an Eclipse-style IDE for an indigenous processor; cross-compiled OpenOCD for Windows and wrote U-Boot flash-programming scripts.</li>
+        <li>Developed STM32F7 firmware for post-silicon verification of a 12-bit SAR ADC.</li>
+        <li>Built a multi-sensor data logger (STM32F4) and simulator fusing mmWave radar, infrared and laser-rangefinder data; MATLAB live visualisation; led field trials.</li></ul></div></div>
+      <div class="role"><div><div class="when">Oct 2022 – May 2023</div><div class="where">Islamabad</div></div><div><h3>Design Engineer</h3><div class="org">Advantest Corporation</div><ul>
+        <li>Designed multi-layer high-speed digital and RF ATE boards in Cadence Allegro for NVIDIA, AMD, Intel and NXP devices on Advantest 93K and Teradyne UltraFLEX testers.</li>
+        <li>0.35–0.5 mm BGA fan-out, signal- and power-integrity analysis.</li></ul></div></div>
+      <div class="role"><div><div class="when">Feb 2020 – Sep 2022</div><div class="where">NSTP, NUST, Islamabad</div></div><div><h3>AI &amp; Embedded Systems Engineer</h3><div class="org">KytherTek Pvt. Ltd.</div><ul>
+        <li>Built computer-vision products: automatic shooting-range scoring, CNN-based pose estimation for sports analysis, and deep-vein-thrombosis detection.</li>
+        <li>Wrote embedded C firmware for STM32 and ESP32 with Bluetooth Low Energy 5.0; built IoT home-automation devices.</li></ul></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec g" id="skills">
+  <div class="w">
+    <div class="sec-head">
+      <div><div class="eyebrow"><b>06</b>Capabilities</div><h2>Tools &amp; technologies</h2></div>
+      <p>The tools I use day to day, grouped by where they sit in the stack.</p>
+    </div>
+    <div class="matrix">
+      <div class="cell"><h4>Languages</h4><div class="chips"><span>C</span><span>C++</span><span>Python</span><span>MATLAB</span><span>Bash</span></div></div>
+      <div class="cell"><h4>Machine learning</h4><div class="chips"><span>PyTorch</span><span>Keras</span><span>3D &amp; 2D detection</span><span>Trajectory prediction</span><span>Sensor fusion</span></div></div>
+      <div class="cell"><h4>Uncertainty &amp; safety</h4><div class="chips"><span>Conformal prediction</span><span>Learn-then-Test</span><span>E-values &amp; betting tests</span><span>Fixed-sequence testing</span></div></div>
+      <div class="cell"><h4>Edge AI</h4><div class="chips"><span>llama.cpp</span><span>Quantisation</span><span>On-device inference</span><span>Cross-compilation</span></div></div>
+      <div class="cell"><h4>Embedded Linux</h4><div class="chips"><span>Buildroot</span><span>U-Boot</span><span>Kernel config</span><span>Device trees</span><span>RISC-V (CVA6)</span></div></div>
+      <div class="cell"><h4>Toolchains &amp; debug</h4><div class="chips"><span>GCC</span><span>binutils</span><span>GDB</span><span>OpenOCD</span><span>JTAG</span><span>Git</span></div></div>
+      <div class="cell"><h4>Firmware</h4><div class="chips"><span>STM32 F4/F7</span><span>ESP32</span><span>BLE 5.0</span><span>Embedded C</span></div></div>
+      <div class="cell"><h4>Autonomous driving</h4><div class="chips"><span>Argoverse 2</span><span>nuScenes</span><span>Waymo Open Motion</span><span>nuPlan</span><span>ScenarioNet</span><span>MetaDrive</span><span>ROS</span></div></div>
+      <div class="cell"><h4>Hardware</h4><div class="chips"><span>Cadence Allegro</span><span>Altium</span><span>High-speed &amp; RF PCB</span><span>SI/PI</span><span>LabVIEW</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec g" id="education">
+  <div class="w">
+    <div class="sec-head">
+      <div><div class="eyebrow"><b>07</b>Education</div><h2>Degrees &amp; honours</h2></div>
+      <p>Three electrical engineering qualifications, from technical diploma to a master's in AI and autonomous systems.</p>
+    </div>
+    <div class="edu">
+      <div class="deg"><span class="yr">2024</span><h3>M.S. Electrical Engineering</h3><p>AI &amp; Autonomous Systems · National University of Sciences &amp; Technology (NUST), SEECS, Islamabad</p></div>
+      <div class="deg"><span class="yr">2018</span><h3>B.Sc. Electrical Engineering</h3><p>Power &amp; Control Systems · University of Engineering &amp; Technology (UET), Taxila</p></div>
+      <div class="deg"><span class="yr">2014</span><h3>B.Tech (Pass) &amp; DAE</h3><p>Electrical Technology · Bahauddin Zakariya University and Swedish College of Science &amp; Technology, Multan</p></div>
+    </div>
+    <div class="honours">
+      <div class="hon"><b>1st position</b><span>B.Tech (Pass), Govt. College of Technology Multan, 2014</span></div>
+      <div class="hon"><b>2nd in Punjab</b><span>DAE, Punjab Board of Technical Education, 2012</span></div>
+      <div class="hon"><b>High Achiever</b><span>High Achievers Development Program, Govt. of Punjab, 2012</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec g" id="principles">
+  <div class="w">
+    <div class="sec-head"><div><div class="eyebrow"><b>08</b>How I work</div><h2>Principles</h2></div><p>The habits behind the work.</p></div>
+    <div class="principles">
+      <div class="pr"><h4>Own the whole path</h4><p>I'm comfortable from the PCB to the model, so problems don't stop at a layer boundary. If a model is slow, I look at the compiler and the memory map too.</p></div>
+      <div class="pr"><h4>Evidence before claims</h4><p>I pre-register experiments, keep evaluation data held out and release records so results can be reproduced. The same habit goes into release testing.</p></div>
+      <div class="pr"><h4>Write it down</h4><p>Clear design notes, reviews and documentation make remote teams work. I write for the next engineer who has to maintain the code.</p></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<section class="contact g" id="contact">
+  <div class="w">
+    <div>
+      <div class="eyebrow">Contact</div>
+      <h2>Let's build something <em>reliable</em>.</h2>
+      <p class="intro">For questions, collaborations or opportunities in edge AI, embedded Linux, RISC-V or ML safety, send a message here. I usually reply within one working day.</p>
+      <div class="clist">
+        <div><span>Location</span><span>Islamabad, Pakistan · UTC+5</span></div>
+        <a href="https://www.linkedin.com/in/hwaqas160" target="_blank" rel="noopener"><span>LinkedIn</span><span>in/hwaqas160 ↗</span></a>
+        <a href="https://github.com/hwaqas160" target="_blank" rel="noopener"><span>GitHub</span><span>hwaqas160 ↗</span></a>
+        <a href="https://orcid.org/0009-0003-4461-8005" target="_blank" rel="noopener"><span>ORCID</span><span>0009-0003-4461-8005 ↗</span></a>
+        
+      </div>
+    </div>
+    <form id="contact-form" novalidate>
+      <h3>Send a message</h3>
+      <div class="row2">
+        <label for="cf-name">Name<input id="cf-name" name="name" autocomplete="name" required></label>
+        <label for="cf-email">Email<input id="cf-email" name="email" type="email" autocomplete="email" required></label>
+      </div>
+      <div class="row2">
+        <label for="cf-company">Company<input id="cf-company" name="company" autocomplete="organization"></label>
+        <label for="cf-topic">Topic<select id="cf-topic" name="topic"><option>Opportunity</option><option>Project or consulting</option><option>Research collaboration</option><option>Other</option></select></label>
+      </div>
+      <label for="cf-message">Message<textarea id="cf-message" name="message" required placeholder="How can I help?"></textarea></label>
+      <input class="hp" type="checkbox" name="botcheck" id="cf-bot" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px"><button class="btn dark" type="submit" id="cf-send">Send message</button><span class="note">Your details are used only to reply to you.</span></div>
+      <p class="msg" id="cf-status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+<footer class="g"><div class="w"><span>© <span id="yr">2026</span> Hassan Waqas Saleem · AI &amp; Embedded Systems Engineer</span><span><a href="https://www.linkedin.com/in/hwaqas160" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/hwaqas160" target="_blank" rel="noopener">GitHub</a> · <a href="#top">Back to top ↑</a></span></div></footer>
+
+<script>
+(function () {
+  var ACCESS_KEY = "__WEB3FORMS_KEY__";
+  document.getElementById("yr").textContent = new Date().getFullYear();
+  var form = document.getElementById("contact-form");
+  var status = document.getElementById("cf-status");
+  var send = document.getElementById("cf-send");
+  function show(msg, kind) { status.textContent = msg; status.className = "msg " + (kind || ""); }
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var name = form.name.value.trim(), email = form.email.value.trim(), message = form.message.value.trim();
+    if (!name || !message || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      show("Please add your name, a valid email address and a message.", "err"); return;
+    }
+    if (ACCESS_KEY.indexOf("__") === 0) {
+      show("This preview can't send messages yet. The live website delivers them by email.", "err"); return;
+    }
+    send.disabled = true; show("Sending…");
+    fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify({
+        access_key: ACCESS_KEY, name: name, email: email, company: form.company.value.trim(),
+        subject: "Portfolio: " + form.topic.value + " from " + name,
+        message: message, botcheck: form.botcheck.checked, from_name: "Hassan Waqas Saleem portfolio"
+      })
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      if (d.success) { form.reset(); show("Thank you. Your message was sent, and I'll reply to " + email + " soon.", "ok"); }
+      else { show("The message didn't go through: " + (d.message || "please try again in a minute."), "err"); }
+    }).catch(function () {
+      show("The message couldn't be sent. Check your connection and try again.", "err");
+    }).finally(function () { send.disabled = false; });
+  });
+})();
+</script>
+
+</body>
+</html>
