@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rahat Zeeshan Saleem · Supply chain operations, experimentation and causal inference</title>
+<meta name="description" content="Rahat Zeeshan Saleem: Lead Inventory Planner and Kinaxis Functional Lead at Zones LLC, researching experimental and causal methods for operations: switchback experiments with delayed effects, rerandomization and causal evaluation of AI decision support.">
+<meta name="author" content="Rahat Zeeshan Saleem">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hwaqas160.github.io/rahat-zeeshan-saleem/">
+<link rel="canonical" href="https://hwaqas160.github.io/rahat-zeeshan-saleem/">
+<meta property="og:title" content="Rahat Zeeshan Saleem · Supply chain operations, experimentation and causal inference">
+<meta property="og:description" content="Planning practice and research on experiments that respect operations: delayed effects, rerandomization and causal evaluation of AI decision support.">
+<meta name="theme-color" content="#1F3A5F">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script>
+  // apply a saved light/dark choice before the page paints
+  (function () { try { var t = localStorage.getItem('rzs-theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Rahat Zeeshan Saleem",
+  "jobTitle": "Lead Inventory Planner and Kinaxis Functional Lead",
+  "worksFor": {"@type": "Organization", "name": "Zones LLC"},
+  "alumniOf": [
+    {"@type": "CollegeOrUniversity", "name": "National University of Sciences and Technology (NUST)"},
+    {"@type": "CollegeOrUniversity", "name": "Bahauddin Zakariya University"}
+  ],
+  "address": {"@type": "PostalAddress", "addressLocality": "Islamabad", "addressCountry": "PK"},
+  "sameAs": ["https://www.linkedin.com/in/rahat-zeeshan-saleem"],
+  "knowsAbout": ["Supply chain operations", "Inventory planning", "Experimental design", "Switchback experiments", "Causal inference"]
+}
+</script>
+<style>
+/* ---------- fonts (bundled, SIL Open Font License) ---------- */
+@font-face { font-family: 'Source Serif 4'; font-style: normal; font-weight: 400; font-display: swap; src: url(assets/fonts/source-serif-4-latin-400-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Source Serif 4'; font-style: italic; font-weight: 400; font-display: swap; src: url(assets/fonts/source-serif-4-latin-400-italic.woff2) format('woff2'); }
+@font-face { font-family: 'Source Serif 4'; font-style: normal; font-weight: 600; font-display: swap; src: url(assets/fonts/source-serif-4-latin-600-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Source Serif 4'; font-style: normal; font-weight: 700; font-display: swap; src: url(assets/fonts/source-serif-4-latin-700-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: swap; src: url(assets/fonts/inter-latin-400-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: swap; src: url(assets/fonts/inter-latin-500-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap; src: url(assets/fonts/inter-latin-600-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 700; font-display: swap; src: url(assets/fonts/inter-latin-700-normal.woff2) format('woff2'); }
+
+/* ---------- design tokens ---------- */
+:root {
+  --bg: #F7F9FB; --surface: #FFFFFF; --surface-2: #F1F4F8; --ink: #16202B; --ink-2: #33404F; --muted: #5E6A79;
+  --brand: #1F3A5F; --brand-ink: #1F3A5F; --accent: #C8742B; --accent-ink: #9E5517; --rule: #E1E7EE; --chip: #EDF2F7;
+  --hero-from: #E9EFF6; --hero-to: #F7F9FB; --on-brand: #FFFFFF;
+  --shadow: 0 1px 2px rgba(16, 24, 40, .05), 0 10px 30px rgba(16, 24, 40, .06);
+  --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --radius: 16px; --max: 1100px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D131A; --surface: #141D27; --surface-2: #18232F; --ink: #E8EDF3; --ink-2: #C8D2DD; --muted: #9AA8B8;
+    --brand: #2D5687; --brand-ink: #A8C7EE; --accent: #E59A57; --accent-ink: #F0B27A; --rule: #253344; --chip: #1C2836;
+    --hero-from: #132131; --hero-to: #0D131A; --on-brand: #FFFFFF;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 30px rgba(0, 0, 0, .25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0D131A; --surface: #141D27; --surface-2: #18232F; --ink: #E8EDF3; --ink-2: #C8D2DD; --muted: #9AA8B8;
+  --brand: #2D5687; --brand-ink: #A8C7EE; --accent: #E59A57; --accent-ink: #F0B27A; --rule: #253344; --chip: #1C2836;
+  --hero-from: #132131; --hero-to: #0D131A; --on-brand: #FFFFFF;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 30px rgba(0, 0, 0, .25);
+  color-scheme: dark;
+}
+
+/* ---------- base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 76px; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.65;
+       -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: hidden; }
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--brand-ink); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--accent-ink); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+.wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 16px; }
+@media (min-width: 640px) { .wrap { padding: 0 28px; } }
+.skip { position: absolute; left: -9999px; top: 8px; background: var(--brand); color: var(--on-brand); padding: 8px 14px; border-radius: 8px; z-index: 100; }
+.skip:focus { left: 12px; }
+h1, h2, h3 { font-family: var(--serif); color: var(--ink); line-height: 1.18; margin: 0; letter-spacing: -.01em; }
+p { margin: 0 0 1em; }
+.eyebrow { font-family: var(--sans); font-size: .78rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-ink); margin: 0 0 .6rem; }
+
+/* ---------- header ---------- */
+.site-header { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 82%, transparent);
+               backdrop-filter: saturate(160%) blur(12px); -webkit-backdrop-filter: saturate(160%) blur(12px); border-bottom: 1px solid var(--rule); }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font-weight: 600; white-space: nowrap; }
+.brand:hover { color: var(--ink); }
+.mono { width: 36px; height: 36px; border-radius: 10px; background: var(--brand); color: #fff; display: grid; place-items: center;
+        font-family: var(--serif); font-weight: 700; font-size: 15px; position: relative; flex: none; }
+.mono::after { content: ""; position: absolute; left: 9px; right: 9px; bottom: 6px; height: 2px; border-radius: 2px; background: var(--accent); }
+.brand-name { font-size: .98rem; }
+.nav { display: flex; align-items: center; gap: 4px; }
+.nav a { color: var(--ink-2); text-decoration: none; font-size: .93rem; font-weight: 500; padding: 8px 10px; border-radius: 8px; }
+.nav a:hover { background: var(--surface-2); color: var(--ink); }
+.icon-btn { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 10px; border: 1px solid var(--rule);
+            background: var(--surface); color: var(--ink); cursor: pointer; flex: none; }
+.icon-btn:hover { background: var(--surface-2); }
+.icon-btn svg { width: 19px; height: 19px; }
+.tools { display: flex; align-items: center; gap: 8px; }
+#nav-toggle { display: none; }
+.sun { display: none; }
+:root[data-theme="dark"] .sun { display: block; } :root[data-theme="dark"] .moon { display: none; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sun { display: block; } :root:not([data-theme="light"]) .moon { display: none; } }
+@media (max-width: 900px) {
+  #nav-toggle { display: grid; }
+  .nav { position: absolute; top: 64px; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; padding: 8px 16px 16px;
+         background: var(--bg); border-bottom: 1px solid var(--rule); box-shadow: var(--shadow); display: none; }
+  .nav.open { display: flex; }
+  .nav a { padding: 12px 10px; font-size: 1rem; }
+}
+@media (max-width: 359px) { .brand-name { display: none; } }
+
+/* ---------- hero ---------- */
+.hero { background: radial-gradient(1200px 500px at 85% -10%, var(--hero-from), transparent 70%), linear-gradient(180deg, var(--hero-from), var(--hero-to));
+        border-bottom: 1px solid var(--rule); }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 48px; align-items: center; padding-top: 72px; padding-bottom: 64px; }
+.hero h1 { font-size: clamp(2.35rem, 5.4vw, 3.7rem); font-weight: 700; color: var(--brand-ink); margin-bottom: .35em; }
+.lead { font-family: var(--serif); font-size: clamp(1.12rem, 2.1vw, 1.32rem); line-height: 1.55; color: var(--ink-2); max-width: 40em; }
+.role { color: var(--muted); font-size: .97rem; margin: 1.1rem 0 1.6rem; }
+.role strong { color: var(--ink); font-weight: 600; }
+.btns { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 12px; font-weight: 600; font-size: .95rem;
+       text-decoration: none; border: 1px solid transparent; transition: transform .15s ease, background .15s ease, border-color .15s ease; }
+.btn svg { width: 18px; height: 18px; flex: none; }
+.btn-primary { background: var(--brand); color: #fff; }
+.btn-primary:hover { background: color-mix(in srgb, var(--brand) 88%, #000); color: #fff; transform: translateY(-1px); }
+.btn-ghost { background: var(--surface); color: var(--ink); border-color: var(--rule); }
+.btn-ghost:hover { border-color: var(--brand-ink); color: var(--ink); transform: translateY(-1px); }
+.glance { background: var(--surface); border: 1px solid var(--rule); border-radius: 20px; box-shadow: var(--shadow); padding: 26px; }
+.glance-top { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+.avatar { width: 68px; height: 68px; border-radius: 50%; display: grid; place-items: center; flex: none; font-family: var(--serif); font-weight: 700;
+          font-size: 24px; color: #fff; background: linear-gradient(135deg, #1F3A5F, #2F5D8F); box-shadow: 0 0 0 4px var(--surface), 0 0 0 6px var(--accent); }
+img.avatar { object-fit: cover; padding: 0; }   /* used if the RZ monogram is replaced by a photo */
+.glance-top h2 { font-size: 1.12rem; }
+.glance-top p { margin: 2px 0 0; color: var(--muted); font-size: .9rem; }
+.glance dl { margin: 0; display: grid; gap: 12px; }
+.glance dt { font-size: .72rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.glance dd { margin: 2px 0 0; font-size: .95rem; color: var(--ink); }
+@media (max-width: 860px) { .hero .wrap { grid-template-columns: 1fr; gap: 32px; padding-top: 48px; padding-bottom: 44px; } }
+
+/* ---------- stats ---------- */
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: -30px; position: relative; z-index: 2; }
+.stat { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 18px 18px 16px; box-shadow: var(--shadow); }
+.stat b { display: block; font-family: var(--serif); font-size: 1.75rem; line-height: 1.1; color: var(--brand-ink); font-weight: 700; }
+.stat span { display: block; margin-top: 6px; font-size: .86rem; color: var(--muted); line-height: 1.4; }
+@media (max-width: 860px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .stat b { font-size: 1.45rem; } }
+
+/* ---------- sections ---------- */
+section.block { padding: 76px 0 8px; }
+.section-head { margin-bottom: 28px; max-width: 46em; }
+.section-head h2 { font-size: clamp(1.7rem, 3.2vw, 2.25rem); }
+.section-head p { color: var(--muted); margin: .6rem 0 0; }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); box-shadow: var(--shadow); }
+
+/* about */
+.about { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.about-text p { font-size: 1.06rem; color: var(--ink-2); }
+.interests { padding: 22px 24px; border-left: 4px solid var(--accent); }
+.interests h3 { font-family: var(--sans); font-size: .78rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.interests ul { margin: 0; padding-left: 1.1em; }
+.interests li { margin: 0 0 .45em; color: var(--ink); }
+@media (max-width: 860px) { .about { grid-template-columns: 1fr; } }
+
+/* research */
+.tag { display: inline-block; font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px;
+       background: var(--chip); color: var(--ink-2); }
+.tag.hot { background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent-ink); }
+.feature { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; padding: 30px; margin-bottom: 18px; }
+.feature-text { max-width: 54em; }
+.feature h3 { font-size: clamp(1.3rem, 2.4vw, 1.6rem); margin: 12px 0 12px; }
+.feature p { color: var(--ink-2); }
+.figure { background: #FFFFFF; border: 1px solid var(--rule); border-radius: 12px; padding: 12px; margin: 0; }
+.figure figcaption { font-size: .82rem; color: #4A5562; margin-top: 8px; line-height: 1.45; }
+@media (max-width: 860px) { .feature { padding: 22px; } }
+.paper { padding: 24px 26px; margin-bottom: 18px; }
+.paper h3 { font-size: 1.22rem; margin: 10px 0 6px; }
+.paper .authors { color: var(--muted); font-size: .93rem; margin: 0 0 10px; }
+.paper p { color: var(--ink-2); }
+.paper .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.mini { padding: 20px 22px; }
+.mini h4 { font-family: var(--serif); font-size: 1.06rem; line-height: 1.3; margin: 10px 0 6px; color: var(--ink); }
+.mini p { color: var(--muted); font-size: .93rem; margin: 0; }
+@media (max-width: 760px) { .list { grid-template-columns: 1fr; } }
+
+/* experience timeline */
+.company { padding: 26px 28px; }
+.company-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; align-items: baseline; border-bottom: 1px solid var(--rule); padding-bottom: 14px; margin-bottom: 8px; }
+.company-head h3 { font-size: 1.35rem; }
+.company-head p { margin: 0; color: var(--muted); }
+.timeline { list-style: none; margin: 0; padding: 0; }
+.timeline > li { position: relative; padding: 18px 0 6px 28px; }
+.timeline > li::before { content: ""; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--rule); }
+.timeline > li:first-child::before { top: 26px; }
+.timeline > li:last-child::before { bottom: auto; height: 26px; }
+.timeline > li::after { content: ""; position: absolute; left: 1px; top: 22px; width: 14px; height: 14px; border-radius: 50%; background: var(--surface);
+                        border: 3px solid var(--brand-ink); }
+.timeline > li:first-child::after { border-color: var(--accent); background: var(--accent); }
+.when { font-size: .82rem; font-weight: 600; letter-spacing: .04em; color: var(--accent-ink); text-transform: uppercase; }
+.timeline h4 { font-family: var(--serif); font-size: 1.12rem; margin: 2px 0 6px; color: var(--ink); }
+.timeline ul { margin: 0; padding-left: 1.1em; color: var(--ink-2); }
+.timeline ul li { margin-bottom: .35em; }
+
+/* education */
+.edu { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.edu .card { padding: 24px 26px; }
+.edu h3 { font-size: 1.2rem; margin: 8px 0 4px; }
+.edu .inst { color: var(--muted); margin: 0 0 12px; font-size: .95rem; }
+.edu ul { margin: 0; padding-left: 1.1em; color: var(--ink-2); }
+.edu li { margin-bottom: .35em; }
+.badge { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: .85rem; color: var(--brand-ink); background: var(--chip); border-radius: 999px; padding: 4px 12px; }
+@media (max-width: 760px) { .edu { grid-template-columns: 1fr; } }
+
+/* skills */
+.skills { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.skill { padding: 20px 22px; }
+.skill h3 { font-family: var(--sans); font-size: .8rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.chips li { background: var(--chip); color: var(--ink); border-radius: 999px; padding: 5px 12px; font-size: .88rem; line-height: 1.35; }
+@media (max-width: 960px) { .skills { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 620px) { .skills { grid-template-columns: 1fr; } }
+
+/* honours */
+.honours { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.honour { padding: 18px 22px; display: flex; gap: 14px; align-items: flex-start; }
+.honour .ico { width: 38px; height: 38px; border-radius: 10px; background: var(--chip); color: var(--accent-ink); display: grid; place-items: center; flex: none; }
+.honour .ico svg { width: 20px; height: 20px; }
+.honour h3 { font-family: var(--sans); font-size: 1rem; font-weight: 600; margin: 0 0 2px; }
+.honour p { margin: 0; color: var(--muted); font-size: .92rem; }
+@media (max-width: 760px) { .honours { grid-template-columns: 1fr; } }
+
+/* contact */
+.contact { margin: 76px auto 0; }
+.contact-card { border-radius: 22px; padding: clamp(28px, 5vw, 48px); color: #fff; background: radial-gradient(800px 300px at 90% 0%, rgba(200, 116, 43, .35), transparent 60%), linear-gradient(135deg, #1A3352, #24476F); box-shadow: var(--shadow); }
+.contact-card h2 { color: #fff; font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: .4em; }
+.contact-card p { color: #D9E3EF; max-width: 38em; }
+.contact-card .eyebrow { color: #F2B27C; }
+.contact-card .btn-primary { background: #fff; color: #1A3352; }
+.contact-card .btn-primary:hover { background: #F2F5F9; color: #1A3352; }
+.contact-card .btn-ghost { background: transparent; color: #fff; border-color: rgba(255, 255, 255, .45); }
+.contact-card .btn-ghost:hover { border-color: #fff; color: #fff; }
+.contact-meta { margin-top: 18px; font-size: .92rem; color: #C9D6E5; }
+.contact-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 36px; align-items: start; }
+@media (max-width: 860px) { .contact-grid { grid-template-columns: 1fr; gap: 26px; } }
+.form { display: grid; gap: 14px; background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .16); border-radius: 16px; padding: 22px; }
+.form .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 560px) { .form .row2 { grid-template-columns: 1fr; } }
+.form label { display: grid; gap: 6px; align-content: start; font-size: .88rem; font-weight: 600; color: #EAF0F7; }
+.form ::placeholder { color: #8A97A8; }
+.form input, .form textarea { width: 100%; font: inherit; font-weight: 400; font-size: 1rem; color: #16202B; background: #FFFFFF; border: 1px solid #C9D3DF;
+  border-radius: 10px; padding: 11px 13px; outline: none; transition: border-color .15s ease, box-shadow .15s ease; }
+.form textarea { resize: vertical; min-height: 140px; line-height: 1.5; }
+.form input:focus, .form textarea:focus { border-color: #F2B27C; box-shadow: 0 0 0 3px rgba(242, 178, 124, .35); }
+.form .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.form .send { justify-self: start; border: 0; cursor: pointer; }
+.form .send[disabled] { opacity: .65; cursor: wait; }
+.form-status { margin: 0; min-height: 1.4em; font-size: .95rem; color: #DCE6F2; }
+.form-status.ok { color: #A7F3C5; font-weight: 600; }
+.form-status.err { color: #FFC9B5; font-weight: 600; }
+
+footer { padding: 36px 0 44px; color: var(--muted); font-size: .86rem; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; }
+
+@media print {
+  .site-header, .btns, .contact-card .btn, #nav-toggle { display: none !important; }
+  body { background: #fff; } .card, .stat, .glance { box-shadow: none; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Rahat Zeeshan Saleem, back to top"><span class="mono" aria-hidden="true">RZ</span><span class="brand-name">Rahat Zeeshan Saleem</span></a>
+    <div class="tools">
+      <nav class="nav" id="site-nav" aria-label="Main">
+        <a href="#about">About</a>
+        <a href="#research">Research</a>
+        <a href="#experience">Experience</a>
+        <a href="#education">Education</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch between light and dark mode">
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+      <button class="icon-btn" id="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <!-- ===== hero ===== -->
+  <div class="hero" id="top">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Supply chain operations · Experimentation · Causal inference</p>
+        <h1>Rahat Zeeshan Saleem</h1>
+        <p class="lead">I work on the planning rules that move inventory, and I study how to test them properly. My research develops experimental and causal methods for operations: switchback experiments with delayed effects, rerandomization, and the causal evaluation of AI decision support.</p>
+        <p class="role"><strong>Lead Inventory Planner &amp; Kinaxis Functional Lead</strong>, Zones LLC (USA) · Islamabad, Pakistan</p>
+        <div class="btns">
+          <a class="btn btn-primary" href="files/Rahat_Zeeshan_Saleem_CV.pdf" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Download CV</a>
+          <a class="btn btn-ghost" href="#research">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5V5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2.5zM8 7h7M8 11h7"/></svg>Research</a>
+          <a class="btn btn-ghost" href="#contact">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Contact</a>
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/rahat-zeeshan-saleem" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4v11H3zM9.5 9.75h3.8v1.5h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1v5.45h-4v-4.83c0-1.15-.02-2.63-1.6-2.63-1.6 0-1.85 1.25-1.85 2.55v4.91h-4z"/></svg>LinkedIn</a>
+        </div>
+      </div>
+      <aside class="glance" aria-label="At a glance">
+        <div class="glance-top">
+          <div class="avatar" aria-hidden="true">RZ</div>
+          <div><h2>At a glance</h2><p>Practice meets research</p></div>
+        </div>
+        <dl>
+          <div><dt>Now</dt><dd>Lead Inventory Planner &amp; Kinaxis Functional Lead, Zones LLC (USA)</dd></div>
+          <div><dt>Education</dt><dd>M.S. Logistics &amp; Supply Chain Management, NUST (AACSB-accredited NBS), CGPA 4.00/4.00 · MBA, Gold Medal</dd></div>
+          <div><dt>Research</dt><dd>Experiments with delayed effects and interference; causal evaluation of AI decision support</dd></div>
+          <div><dt>Tools</dt><dd>Python, MATLAB, Kinaxis Maestro, Power BI</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="stats" aria-label="Highlights">
+      <div class="stat"><b>4.00/4.00</b><span>M.S. CGPA, top performer of the programme (NUST)</span></div>
+      <div class="stat"><b>4+ years</b><span>in supply chain operations at Zones LLC (USA)</span></div>
+      <div class="stat"><b>$2.5M+</b><span>just-in-time portfolio managed per day</span></div>
+      <div class="stat"><b>≈$4.8M</b><span>reduction in excess and obsolete inventory I contributed to</span></div>
+    </div>
+  </div>
+
+  <!-- ===== about ===== -->
+  <section class="block" id="about">
+    <div class="wrap">
+      <div class="section-head"><p class="eyebrow">About</p><h2>From planning practice to research</h2></div>
+      <div class="about">
+        <div class="about-text">
+          <p>I have worked in supply chain operations at Zones LLC (USA) since 2022, and in inventory planning since 2024. Today I lead replenishment and distribution planning and, as Kinaxis Functional Lead, specify planning logic with the vendor's developers and test it before it goes live.</p>
+          <p>Every change to a planning rule raises the same question: did it work? A before-and-after comparison cannot separate a new rule from shifting demand. That question drives my research, which brings randomized experiments and causal inference to operations, where decisions act with delays and products share stock, capacity and suppliers.</p>
+        </div>
+        <div class="card interests">
+          <h3>Research interests</h3>
+          <ul>
+            <li>Design and analysis of experiments with delayed effects and interference, including rerandomized and model-assisted switchbacks</li>
+            <li>Causal evaluation of planning policies and AI decision support</li>
+            <li>Inventory and supply-network analytics</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== research ===== -->
+  <section class="block" id="research">
+    <div class="wrap">
+      <div class="section-head"><p class="eyebrow">Research</p><h2>Papers and work in progress</h2><p>Methods for testing operational decisions reliably, where effects arrive with a delay and units share resources.</p></div>
+
+      <article class="card feature">
+        <div class="feature-text">
+          <span class="tag hot">Working paper · 2026</span>
+          <h3>Switchback experiments with delayed effects: Lead-time blindness, exposure alignment and rerandomization on the right days</h3>
+          <p>When a decision acts only after a replenishment lead time, a switchback that switches at least as often as the lead time is blind: the standard contrast is centred exactly on zero, whatever the true effect. Comparing each day with the decision that set its stock recovers the effect (exactly under backlogging), and an aligned randomization test detects a safety-stock change in two-thirds of simulated one-year experiments where the conventional test has no power.</p>
+          <p>With a lead time, rerandomization should balance covariates on the lagged exposure rather than on the day: this cuts the relevant imbalance twentyfold.</p>
+          <div class="btns"><a class="btn btn-primary" href="files/Saleem_2026_Switchback_Experiments_with_Delayed_Effects.pdf" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>Read the paper (PDF)</a></div>
+        </div>
+        <figure class="figure">
+          <img src="assets/img/switchback-figure.png" width="1400" height="540" loading="lazy"
+               alt="Two charts. Left: the conventional switchback estimate stays at zero for switch intervals up to the seven-day lead time and then rises toward the true effect. Right: an aligned randomization test detects the effect in about two-thirds of experiments with short switches, while the conventional test stays near its 5% size.">
+          <figcaption>Left: with a seven-day lead time, the conventional estimate is zero until the switch interval exceeds the lead time. Right: power of the aligned and conventional randomization tests.</figcaption>
+        </figure>
+      </article>
+
+      <article class="card paper">
+        <span class="tag">Under review</span>
+        <h3>Multi-objective knowledge graph completion for sustainable supplier substitution under disruption: Benchmarking learning against post-hoc filtering</h3>
+        <p class="authors"><strong>R. Z. Saleem</strong> et al. · <em>Engineering Applications of Artificial Intelligence</em> (under review)</p>
+        <p>A sustainability-risk penalty inside the loss of graph neural networks, compared with post-hoc filtering and evaluated by disruption simulation with seven-seed paired tests: 33.3% lower recommended-set risk on a food network without loss of recall (p = 0.0156), while a zero-parameter certificate rule beats every learned model on another network.</p>
+        <div class="links"><a class="btn btn-ghost" href="https://doi.org/10.5281/zenodo.22246821" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>Replication package (Zenodo)</a></div>
+      </article>
+
+      <div class="list">
+        <article class="card mini">
+          <span class="tag">In progress</span>
+          <h4>Do chokepoint shocks persist? Port-level evidence from the Red Sea crisis</h4>
+          <p>Event study and synthetic control on IMF PortWatch daily port calls and UN Comtrade trade exposure.</p>
+        </article>
+        <article class="card mini">
+          <span class="tag">In progress</span>
+          <h4>Does forecast accuracy buy service? A decision-aware evaluation of time-series foundation models in retail inventory</h4>
+          <p>Chronos, TimesFM and Moirai against ETS, Croston and LightGBM on M5, Favorita and VN1, scored on inventory cost and service level.</p>
+        </article>
+        <article class="card mini">
+          <span class="tag">Manuscript · 2023</span>
+          <h4>A novel integrated approach for circular supplier selection: Incorporating F-SBWM and Fuzzy DEMATEL</h4>
+          <p>With W. Ahmed, A. S. Khan and T. Zahid; based on the M.S. thesis. Sixteen sub-criteria mapped to SDG 8 and 12, a six-member expert panel, and a lower consistency ratio than Fuzzy BWM (0.039 vs 0.057).</p>
+        </article>
+        <article class="card mini">
+          <span class="tag">2023 – 2024</span>
+          <h4>Earlier empirical studies</h4>
+          <p>A qualitative case study of disruption, sustainability and buyer–supplier relationships among Pakistani textile exporters, and a PLS-SEM survey on digital visibility and supply chain resilience.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== experience ===== -->
+  <section class="block" id="experience">
+    <div class="wrap">
+      <div class="section-head"><p class="eyebrow">Experience</p><h2>Planning at scale</h2></div>
+      <div class="card company">
+        <div class="company-head">
+          <h3>Zones LLC (USA) · Islamabad office</h3>
+          <p>2022 – present · Inventory planning and procurement for North American operations</p>
+        </div>
+        <ol class="timeline">
+          <li>
+            <span class="when">Apr 2026 – present</span>
+            <h4>Lead Inventory Planner &amp; Kinaxis Functional Lead</h4>
+            <ul>
+              <li>Lead replenishment, distribution requirements planning and supply optimisation across business programmes.</li>
+              <li>Specify planning logic with Kinaxis developers, validate algorithms in user-acceptance testing and deploy enhancements.</li>
+            </ul>
+          </li>
+          <li>
+            <span class="when">Jan 2024 – Apr 2026</span>
+            <h4>Inventory Planner, ZIP Centre of Excellence</h4>
+            <ul>
+              <li>Managed a just-in-time portfolio of more than $2.5M a day, covering forecasting, replenishment and parameter tuning.</li>
+              <li>Identified and resolved an algorithm error in Kinaxis RapidResponse, improving planning accuracy.</li>
+              <li>Contributed to a reduction of about $4.8M in excess and obsolete inventory.</li>
+            </ul>
+          </li>
+          <li>
+            <span class="when">Jul 2022 – Jan 2024</span>
+            <h4>Collaborative OEM Warranty Specialist</h4>
+            <ul>
+              <li>Ran procure-to-pay operations of more than $3.5M a quarter.</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== education ===== -->
+  <section class="block" id="education">
+    <div class="wrap">
+      <div class="section-head"><p class="eyebrow">Education</p><h2>Two master's degrees, both with distinction</h2></div>
+      <div class="edu">
+        <article class="card">
+          <span class="badge">2021 – 2023 · CGPA 4.00/4.00</span>
+          <h3>M.S. Logistics and Supply Chain Management</h3>
+          <p class="inst">NUST Business School (AACSB-accredited), National University of Sciences and Technology (NUST), Islamabad</p>
+          <ul>
+            <li>Top performer of the programme (Honor of Excellence).</li>
+            <li>Thesis: <em>A novel integrated approach for circular supplier selection combining the Fuzzy Simplified Best–Worst Method and Fuzzy DEMATEL</em>. Supervisor: Dr Waqas Ahmed; co-supervisor: Dr Abdul Salam Khan.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <span class="badge">2017 – 2021 · CGPA 3.89/4.00</span>
+          <h3>Master of Business Administration (3.5 years)</h3>
+          <p class="inst">Institute of Management Sciences, Bahauddin Zakariya University, Multan</p>
+          <ul>
+            <li>Gold Medal.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== skills ===== -->
+  <section class="block" id="skills">
+    <div class="wrap">
+      <div class="section-head"><p class="eyebrow">Skills</p><h2>Methods and tools</h2></div>
+      <div class="skills">
+        <div class="card skill"><h3>Causal inference</h3><ul class="chips"><li>Randomization tests</li><li>Switchback estimators</li><li>Exposure-based estimators</li><li>Event studies</li><li>Synthetic control</li><li>Difference-in-differences</li></ul></div>
+        <div class="card skill"><h3>Statistics</h3><ul class="chips"><li>Paired &amp; multi-seed testing</li><li>Simulation studies</li><li>PLS-SEM</li><li>Fuzzy BWM</li><li>DEMATEL</li></ul></div>
+        <div class="card skill"><h3>Stochastic modelling</h3><ul class="chips"><li>Stochastic inventory models</li><li>Order-up-to policies</li><li>Lost sales &amp; backlogging</li><li>Monte Carlo simulation</li><li>Supply optimisation &amp; DRP</li></ul></div>
+        <div class="card skill"><h3>Machine learning</h3><ul class="chips"><li>Graph neural networks</li><li>Knowledge-graph embeddings</li><li>Time-series foundation models</li></ul></div>
+        <div class="card skill"><h3>Programming</h3><ul class="chips"><li>Python</li><li>NumPy</li><li>pandas</li><li>statsmodels</li><li>PyTorch</li><li>PyTorch Geometric</li><li>Optuna</li><li>MATLAB</li><li>SPSS</li><li>Git</li></ul></div>
+        <div class="card skill"><h3>Planning systems &amp; languages</h3><ul class="chips"><li>Kinaxis Maestro (RapidResponse)</li><li>Microsoft Dynamics 365</li><li>Power BI</li><li>English (full professional)</li><li>Urdu (native)</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== honours ===== -->
+  <section class="block" id="honours">
+    <div class="wrap">
+      <div class="section-head"><p class="eyebrow">Honours &amp; certificates</p><h2>Recognition</h2></div>
+      <div class="honours">
+        <div class="card honour"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 22l5-3 5 3-1.5-8"/></svg></div>
+          <div><h3>Honor of Excellence</h3><p>Top performer, M.S. Logistics and Supply Chain Management, NUST</p></div></div>
+        <div class="card honour"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 22l5-3 5 3-1.5-8"/></svg></div>
+          <div><h3>Gold Medal</h3><p>MBA, Bahauddin Zakariya University (2021)</p></div></div>
+        <div class="card honour"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.1 6.1-.6z"/></svg></div>
+          <div><h3>TMQ Excellence Award &amp; 5-Star Service Award</h3><p>Zones LLC · TMQ Excellence Award in Q4 2024 and Q4 2025</p></div></div>
+        <div class="card honour"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H4z"/><path d="M8 20h8M12 16v4M8 8h8M8 12h5"/></svg></div>
+          <div><h3>Certificates</h3><p>CSCMP Demand Planning (2025) · Microsoft Career Essentials in Data Analysis (2025) · Kinaxis RapidResponse Fundamentals (2024) · Microsoft PL-300 Power BI Data Analyst (2024)</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== contact ===== -->
+  <section class="wrap contact" id="contact">
+    <div class="contact-card">
+      <div class="contact-grid">
+        <div>
+          <p class="eyebrow">Contact</p>
+          <h2>Let's talk about testing decisions that matter</h2>
+          <p>I welcome conversations about experimentation, causal inference and supply chain analytics, in research and in practice. Send me a message and I will reply by email.</p>
+          <div class="btns">
+            <a class="btn btn-ghost" href="https://www.linkedin.com/in/rahat-zeeshan-saleem" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4v11H3zM9.5 9.75h3.8v1.5h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1v5.45h-4v-4.83c0-1.15-.02-2.63-1.6-2.63-1.6 0-1.85 1.25-1.85 2.55v4.91h-4z"/></svg>LinkedIn</a>
+            <a class="btn btn-ghost" href="files/Rahat_Zeeshan_Saleem_CV.pdf" download>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Download CV</a>
+          </div>
+          <p class="contact-meta">Islamabad, Pakistan</p>
+        </div>
+        <form class="form" id="contact-form" autocomplete="on">
+          <div class="row2">
+            <label>Your name<input name="name" type="text" required maxlength="100" autocomplete="name"></label>
+            <label>Your email<input name="email" type="email" required maxlength="150" autocomplete="email" placeholder="So I can reply to you"></label>
+          </div>
+          <label>Subject<input name="subject" type="text" required maxlength="140"></label>
+          <label>Message<textarea name="message" rows="6" required maxlength="5000"></textarea></label>
+          <label class="hp" aria-hidden="true">Leave this empty<input name="_honey" type="text" tabindex="-1" autocomplete="off"></label>
+          <button class="btn btn-primary send" type="submit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg>Send message</button>
+          <p class="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="year">2026</span> Rahat Zeeshan Saleem</span>
+    <span>Set in Source Serif 4 and Inter (SIL Open Font License)</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var toggle = document.getElementById('theme-toggle');
+  toggle.addEventListener('click', function () {
+    var current = root.getAttribute('data-theme');
+    var dark = current ? current === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var next = dark ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('rzs-theme', next); } catch (e) {}
+  });
+  var btn = document.getElementById('nav-toggle'), nav = document.getElementById('site-nav');
+  btn.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  nav.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () { nav.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); btn.setAttribute('aria-label', 'Open menu'); });
+  });
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Contact form: messages are forwarded by FormSubmit (formsubmit.co) and the address is never shown on the page.
+  // After activation, FormSubmit gives a random string that can replace the address below.
+  var FORM_TARGET = ['rahatzeeshan1', 'gmail.com'].join('@');
+  var form = document.getElementById('contact-form');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var status = form.querySelector('.form-status'), send = form.querySelector('.send');
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    var d = new FormData(form);
+    if (d.get('_honey')) return;                                   // filled in by a bot
+    var data = { name: d.get('name'), email: d.get('email'), subject: d.get('subject'), message: d.get('message'),
+                 _subject: 'Website message: ' + d.get('subject'), _template: 'table', _captcha: 'false' };
+    send.disabled = true; status.className = 'form-status'; status.textContent = 'Sending…';
+    fetch('https://formsubmit.co/ajax/' + FORM_TARGET, {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data)
+    }).then(function (r) { return r.json().catch(function () { return {}; }); })
+      .then(function (res) {
+        if (res && (res.success === true || res.success === 'true')) {
+          form.reset(); status.className = 'form-status ok'; status.textContent = 'Thank you. Your message has been sent, and I will reply by email.';
+        } else if (res && /activat/i.test(res.message || '')) {
+          status.className = 'form-status err'; status.textContent = 'The form is not active yet: an activation email has just been sent to the site owner. Please try again later.';
+        } else { throw new Error('send failed'); }
+      })
+      .catch(function () { status.className = 'form-status err'; status.textContent = 'Sorry, the message could not be sent. Please try again later or write to me on LinkedIn.'; })
+      .then(function () { send.disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>
